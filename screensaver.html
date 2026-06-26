@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cinematic Dashboard Screensaver</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #141414;
+      overflow: hidden;
+      /* Default initial fallback to match your extension configuration script */
+      font-family: "Space Mono", Consolas, Monaco, monospace;
+      color: white;
+      user-select: none;
+    }
+
+    /* THE VISUAL CROSS-BLUR & FADE CANVAS LAYERS */
+    .image-canvas {
+      position: fixed;
+      top: -5%;
+      left: -5%;
+      width: 110%;
+      height: 110%;
+      z-index: -1;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #141414;
+      
+      /* Start completely invisible and heavily blurred */
+      opacity: 0;
+      filter: blur(20px); 
+      
+      /* Smoothly animates both opacity and the blur filter over 2 seconds */
+      transition: opacity 2000ms ease-in-out, filter 2000ms ease-in-out;
+      will-change: transform, opacity, filter;
+    }
+
+    /* Active visibility class toggled by JavaScript */
+    .image-canvas.active {
+      opacity: 1; 
+      filter: blur(0px); /* Snaps cleanly into focus when active */
+      /* Fires the smooth panning zoom effect when the layer becomes active */
+      animation: lcssKenBurns 36s infinite alternate ease-in-out;
+    }
+
+    @keyframes lcssKenBurns {
+      0% { 
+        transform: scale(1.0) translate3d(0%, 0%, 0px); 
+      }
+      50% { 
+        transform: scale(1.04) translate3d(-1%, 0.5%, 0px); 
+      }
+      100% { 
+        transform: scale(1.08) translate3d(0.5%, -1%, 0px); 
+      }
+    }
+
+    /* --- BASE STYLE DECLARATIONS --- */
+    .clock-box {
+      display: flex;
+      align-items: baseline; /* Locks all clock elements to a single shared baseline */
+      justify-content: center;
+      font-weight: 800; /* Ultra-bold cinematic thickness */
+      letter-spacing: inherit; /* Dynamically inherits tracking overrides flawlessly from the script */
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9), 0 2px 10px rgba(0, 0, 0, 0.7);
+      white-space: nowrap;
+    }
+
+    #clock-time {
+      font-size: 9.5rem; /* Enhanced visibility presence */
+      line-height: 0.9;
+    }
+
+    /* Bumps up the seconds and AM/PM markers to a larger, unified display size */
+    #clock-seconds, #clock-ampm {
+      font-size: 4.5rem;
+      font-weight: 600;
+      letter-spacing: -1px;
+      margin-left: 15px;
+    }
+
+    #clock-ampm {
+      font-weight: 400; /* Slightly thinner than seconds for visual hierarchy */
+      opacity: 0.85;
+    }
+
+    .bottom-dashboard {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 45px;
+      display: flex;
+      align-items: flex-end; 
+      box-sizing: border-box;
+      z-index: 5;
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
+    }
+
+    /* Equalized flex elements to lock forecast precisely in the center */
+    .dashboard-left-spacer, .weather-box { 
+      flex: 1; 
+    }
+    
+    .forecast-container { 
+      flex: 0 1 auto; 
+      display: flex; 
+      justify-content: center; 
+    }
+
+    #forecast-row {
+      display: flex;
+      gap: 15px;
+    }
+
+    .forecast-day-col {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 18px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 75px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .fc-name { font-size: 0.85rem; margin-bottom: 4px; opacity: 0.8; text-transform: uppercase; }
+    .fc-icon { font-size: 1.6rem; margin-bottom: 6px; }
+    .fc-temps { font-size: 0.95rem; font-weight: bold; }
+    .fc-low { font-size: 0.8rem; opacity: 0.5; margin-left: 4px; }
+
+    .weather-box {
+      display: flex;
+      flex-direction: column;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      text-align: right;
+      align-items: flex-end;
+    }
+
+    #weather-temp { font-size: 3.5rem; font-weight: bold; line-height: 1; }
+    #weather-desc { font-size: 1.1rem; margin-top: 6px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
+
+    /* --- DYNAMIC POSITIONING ATTRIBUTE HOOKS --- */
+    body[data-clock-pos="center"] .clock-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; }
+    body[data-clock-pos="bottom-left"] .clock-box { position: absolute; bottom: 45px; left: 45px; z-index: 10; }
+    body[data-clock-pos="top-left"] .clock-box { position: absolute; top: 45px; left: 45px; z-index: 10; }
+
+    body[data-weather-pos="bottom-right"] .weather-box { text-align: right; align-items: flex-end; position: static; }
+    body[data-weather-pos="top-right"] .weather-box { position: absolute; top: 45px; right: 45px; text-align: right; align-items: flex-end; }
+
+    body[data-hide-weather="true"] .weather-box { display: none !important; }
+    body[data-hide-weather="true"] .forecast-container { display: none !important; }
+  </style>
+</head>
+<body data-clock-pos="center" data-weather-pos="bottom-right" data-hide-weather="false">
+
+  <div id="bg-layer-1" class="image-canvas"></div>
+  <div id="bg-layer-2" class="image-canvas"></div>
+
+  <div class="clock-box">
+    <div id="clock-time">00:00</div>
+    <div id="clock-seconds">00</div>
+    <div id="clock-ampm">AM</div>
+  </div>
+
+  <div class="bottom-dashboard">
+    <div class="dashboard-left-spacer"></div>
+
+    <div class="forecast-container">
+      <div id="forecast-row"></div>
+    </div>
+
+    <div class="weather-box">
+      <div id="weather-temp">--°F</div>
+      <div id="weather-desc">Loading Weather...</div>
+    </div>
+  </div>
+
+  <script src="screensaver.js"></script>
+</body>
+</html>

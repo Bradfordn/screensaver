@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "LCSS Screensaver",
+  "version": "1.9.0",
+  "description": "Minimalist school screensaver with an adjustable idle launch timer.",
+  "permissions": [
+    "geolocation",
+    "storage",
+    "idle"
+  ],
+  "host_permissions": [
+    "https://api.open-meteo.com/*",
+    "https://loremflickr.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "options.html",
+    "default_title": "Screensaver Settings",
+    "default_icon": {
+      "16": "icon128.png",
+      "48": "icon128.png",
+      "128": "icon128.png"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;"
+  },
+  "icons": {
+    "16": "icon128.png",
+    "48": "icon128.png",
+    "128": "icon128.png"
+  }
+}

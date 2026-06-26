@@ -1,0 +1,145 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #111;
+  /* Swapped to Retro Monospace Font Stack */
+  font-family: 'Courier New', Courier, monospace;
+  user-select: none;
+}
+
+#photo-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 1.5s ease-in-out;
+  z-index: 1;
+}
+
+#clock-container {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.85);
+  z-index: 10;
+  width: 95vw; /* Slightly wider to accommodate monospace width tracking */
+}
+
+#clock-main-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+#clock-time {
+  font-size: clamp(4.5rem, 9.5vw, 11.5rem); /* Adjusted slightly for monospace width */
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+#clock-seconds {
+  font-size: clamp(2rem, 4vw, 5rem);
+  font-weight: 500;
+  margin-left: 1.5vw;
+  opacity: 0.85;
+  line-height: 1;
+}
+
+#clock-ampm {
+  font-size: clamp(2rem, 4vw, 5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-left: 2vw;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+/* --- STYLE 1: FULL-WIDTH STATUS BAR --- */
+#status-bar-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: white;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.4) 70%, rgba(0, 0, 0, 0) 100%);
+  padding: 2.5vh 3vw; 
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 10;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+#weather-current-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#weather-temp {
+  font-size: clamp(1.8rem, 3vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+#weather-desc {
+  font-size: clamp(0.85rem, 1.1vw, 1.3rem);
+  font-weight: 400;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+#forecast-row {
+  display: flex;
+  gap: 3vw; 
+  align-items: flex-end;
+}
+
+.forecast-day-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.fc-name {
+  font-size: clamp(0.8rem, 1vw, 1.2rem);
+  font-weight: 700;
+  opacity: 0.9;
+  text-transform: uppercase;
+}
+
+.fc-icon {
+  font-size: clamp(1.4rem, 2vw, 2.5rem);
+  margin: 4px 0;
+}
+
+.fc-desc {
+  display: none; 
+}
+
+.fc-temps {
+  font-size: clamp(0.8rem, 1vw, 1.2rem);
+  font-weight: 600;
+}
+
+.fc-low {
+  opacity: 0.5;
+  font-weight: 400;
+  margin-left: 4px;
+}

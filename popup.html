@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 260px; padding: 12px; font-family: Arial, sans-serif; background: #fdfdfd; margin: 0; }
+    h3 { margin-top: 0; color: #222; text-align: center; font-size: 1.1rem; }
+    .group { margin-bottom: 14px; }
+    label { display: block; font-size: 0.8rem; margin-bottom: 4px; font-weight: bold; color: #555; }
+    select, button { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; font-size: 0.9rem; }
+    button { background: #4285F4; color: white; border: none; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+    button:hover { background: #357ae8; }
+  </style>
+</head>
+<body>
+  <h3>Screensaver Settings</h3>
+  
+  <div class="group">
+    <button id="login">1. Connect Google Photos</button>
+  </div>
+
+  <div class="group">
+    <label for="album-select">2. Select Album Target</label>
+    <select id="album-select" disabled>
+      <option value="">Entire Library (Default)</option>
+    </select>
+  </div>
+
+  <div class="group">
+    <label for="timeout-select">3. Activation Timeout</label>
+    <select id="timeout-select">
+      <option value="15">15 Seconds (Fast Test)</option>
+      <option value="60" selected>1 Minute</option>
+      <option value="300">5 Minutes</option>
+      <option value="600">10 Minutes</option>
+    </select>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
